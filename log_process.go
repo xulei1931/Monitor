@@ -78,17 +78,8 @@ func (w *WriterToDb) Write(wc chan *Message) {
 
 	infSli := strings.Split(w.dbsn, "@")
 
-	// Create a new HTTPClient
-	//c, err := client.NewClient(client.HTTPConfig{
-	//	Addr:     infSli[0],
-	//	Username: infSli[1],
-	//	Password: infSli[2],
-	//})
 	host, err := url.Parse(infSli[0])
-	// NOTE: this assumes you've setup a user and have setup shell env variables,
-	// namely INFLUX_USER/INFLUX_PWD. If not just omit Username/Password below.
-	//fmt.Println(infSli[1])
-	///fmt.Println(host)
+
 	conf := client.Config{
 		URL:      *host,
 		Username: infSli[1],
@@ -222,7 +213,7 @@ func (m *Monitor) start(lp *LogProces) {
 			}
 		}
 	}()
-
+	//  定时器 5s
 	ticker := time.NewTicker(time.Second * 5)
 	go func() {
 		for {
@@ -271,7 +262,7 @@ func main() {
 	for i := 0; i < 2; i++ {
 		go lp.Process()
 	}
-	for i := 0; i < 4;  ++ {
+	for i := 0; i < 4; i++ {
 		go lp.writer.Write(lp.wc)
 	}
 
